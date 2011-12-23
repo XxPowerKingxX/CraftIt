@@ -4,11 +4,14 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.logging.Level;
 
 import org.bukkit.ChatColor;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
 import me.thypthon.BC;
@@ -23,6 +26,7 @@ public class WarningsHandler {
 	private PreparedStatement getUserWarns;
 	private MySQLHandler sqlHandler;
 	private UserHandler userHandler;
+	private SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yy (HH:mm:ss)");
 
 	public WarningsHandler(BC instance) {
         this.plugin = instance;
@@ -59,7 +63,7 @@ public class WarningsHandler {
 		if(reason != null){
 			// ACTION \m/
 			// Gi h*n en advarsel >:D
-    		if(this.sqlHandler.update("INSERT INTO `warns`(`uid`, `by`, `reason`, `date`, `pos`) VALUES ('" + this.userHandler.getUID(given) + "', '" + this.userHandler.getUID(p) + "', '" + reason + "', UNIX_TIMESTAMP(), '" + p.getLocation() + "')")){
+    		if(this.sqlHandler.update("INSERT INTO `warns`(`uid`, `by`, `reason`, `date`, `pos`) VALUES ('" + given.getName() + "', '" + this.userHandler.getUID(p) + "', '" + reason + "', UNIX_TIMESTAMP(), '" + p.getLocation() + "')")){
     			// Gi en beskjed.
     			given.sendMessage(ChatColor.GREEN + "You have just got a warning!");
     			given.sendMessage(ChatColor.GREEN + "Reason: " + ChatColor.WHITE + reason + ChatColor.GREEN + ", by " + ChatColor.WHITE + p.getName());
@@ -73,12 +77,17 @@ public class WarningsHandler {
     
     public boolean listWarns(Player p){
     	int rowCount = -1;
+    	ResultSet rs = null;
+        ArrayList<String> row = new ArrayList<String>();
+        
     	try {
+    		if(sqlHandler.update("SELECT * FROM users WHERE "))
     		this.getUserWarns.setInt(1, this.userHandler.getUID(p));
-    		ResultSet rs = this.getUserWarns.executeQuery();
+    		this.getUserWarns.execute();
+    		rs = this.getUserWarns.getResultSet();
 
     		rowCount = rs.getInt(1);
-			p.sendMessage(ChatColor.WHITE + this.userHandler.getNameFromUID(rs.getInt(2)) + ChatColor.DARK_GREEN + " warnings.");
+			p.sendMessage(ChatColor.WHITE + p.getName() + ChatColor.DARK_GREEN + " warnings.");
 			while (rs.next()) {
 				if(rowCount == 0){
 					p.sendMessage(ChatColor.WHITE + "no warnings found.");
@@ -99,15 +108,39 @@ public class WarningsHandler {
         }
     }
     
+    public ArrayList<String> getWarnings(Block b) {
+
+        ResultSet rs = null;
+        ArrayList<String> row = new ArrayList<String>();
+
+        try {
+            this.getUserWarns.setShort(1, (short) b.getX());
+            this.getUserWarns.execute();
+            rs = this.getUserWarns.getResultSet();
+
+
+            while (rs.next()) {
+
+                Date date = new Date(rs.getLong("time") * 1000);
+                row.add("[" + dateFormat.format(date) + "]");
+            }
+            rs.close();
+
+        } catch (SQLException e) {
+            BC.log.log(Level.SEVERE, "[BC] SQL Exception i getBlockLog ", e);
+        }
+        return row;
+    }
+    
     public boolean listWarnsOthers(Player p, Player req){
     	int rowCount = -1;
     	if(userHandler.getUserStatus(p) >= 5){
     		try {
-    			this.getUserWarns.setInt(1, this.userHandler.getUID(req));
+    			this.getUserWarns.setString(1, req.getName());
     			ResultSet rs = this.getUserWarns.executeQuery();
     			
     			rowCount = rs.getInt(1);
-    			p.sendMessage(ChatColor.WHITE + this.userHandler.getNameFromUID(rs.getInt(2)) + ChatColor.DARK_GREEN + " warnings.");
+    			p.sendMessage(ChatColor.WHITE + req.getName() + ChatColor.DARK_GREEN + " warnings.");
     			while (rs.next()) {
     				if(rowCount == 0){
     					p.sendMessage(ChatColor.WHITE + "no warnings found.");
