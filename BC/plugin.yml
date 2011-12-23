@@ -1,0 +1,49 @@
+name: Insane.no And CraftIt.no
+main: me.thypthon.BC
+version: 1.0
+website: 'http://craftit.no'
+authors: [Xstasy, Jckf, EDITED BY Thypthon]
+softdepend: [Spout, WorldEdit, JSONAPI]
+commands:
+    add:
+        description: Add a user to user tabel.
+        usage: |
+               /<command> [username]
+    mod:
+        description: Add a user to mod tabel.
+        usage: |
+               /<command> [username]
+    admin:
+        description: Add a user to admin tabel.
+        usage: |
+               /<command> [username]
+    kick:
+        description: Kick a player.
+        usage: |
+               /<command> [username] [reason]
+    demote:
+        description: Demote a player.
+        usage: |
+               /<command> [username]
+    a:
+        description: Talk in admin chat.
+        usage: |
+               /<command>
+    bc:
+        description: Broadcast a message.
+        usage: |
+               /<command> [bc]
+    lw:
+        description: See your warnings.
+        usage: |
+               /<command> (username)
+    warn:
+        description: Warn a player.
+        usage: |
+               /<command> [username] [reason]
+    stuck:
+      aliases:
+        - s
+      description: Unstuck yourself
+      usage: |
+             /<command>
