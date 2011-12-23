@@ -32,6 +32,7 @@ public class WarningsHandler {
         this.plugin = instance;
         this.sqlHandler = instance.getSqlHandler();
         this.users = new HashMap<Player, PlayerData>();
+        this.userHandler = instance.getUserHandler();
     }
 
     public boolean initialize() {
