@@ -1,18 +1,18 @@
 /*
-* This file is part of BC.
+* This file is part of Insane.
 *
-* BC is free software: you can redistribute it and/or modify
+* Insane is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
 * the Free Software Foundation, either version 3 of the License, or
 * (at your option) any later version.
 *
-* BC is distributed in the hope that it will be useful,
+* Insane is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 * GNU General Public License for more details.
 *
 * You should have received a copy of the GNU General Public License
-* along with BC. If not, see <http://www.gnu.org/licenses/>.
+* along with Insane. If not, see <http://www.gnu.org/licenses/>.
 * 
 * Customised by Thypthon
 */
