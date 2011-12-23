@@ -81,7 +81,6 @@ public class WarningsHandler {
         ArrayList<String> row = new ArrayList<String>();
         
     	try {
-    		if(sqlHandler.update("SELECT * FROM users WHERE "))
     		this.getUserWarns.setInt(1, this.userHandler.getUID(p));
     		this.getUserWarns.execute();
     		rs = this.getUserWarns.getResultSet();
@@ -106,30 +105,6 @@ public class WarningsHandler {
             BC.log.log(Level.SEVERE, "[BC] Feil i WarningsHandler: ", e);
             return false;
         }
-    }
-    
-    public ArrayList<String> getWarnings(Block b) {
-
-        ResultSet rs = null;
-        ArrayList<String> row = new ArrayList<String>();
-
-        try {
-            this.getUserWarns.setShort(1, (short) b.getX());
-            this.getUserWarns.execute();
-            rs = this.getUserWarns.getResultSet();
-
-
-            while (rs.next()) {
-
-                Date date = new Date(rs.getLong("time") * 1000);
-                row.add("[" + dateFormat.format(date) + "]");
-            }
-            rs.close();
-
-        } catch (SQLException e) {
-            BC.log.log(Level.SEVERE, "[BC] SQL Exception i getBlockLog ", e);
-        }
-        return row;
     }
     
     public boolean listWarnsOthers(Player p, Player req){
