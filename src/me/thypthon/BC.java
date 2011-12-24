@@ -173,6 +173,8 @@ public class BC extends JavaPlugin {
         this.userHandler.initialize();
         this.blockProtect.initialize();
         this.blocklog.initialize();
+        this.warningsHandler.initialize();
+        this.groupHandler.initialize();
         this.irc.initialize();
         registerCommands();
 
