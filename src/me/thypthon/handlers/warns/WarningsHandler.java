@@ -81,12 +81,14 @@ public class WarningsHandler {
     	ResultSet rs = null;
         ArrayList<String> row = new ArrayList<String>();
         
-    	try {
-    		this.getUserWarns.setInt(1, this.userHandler.getUID(p));
+        try {
+            this.plugin.getServer().broadcastMessage("Player: " + p);
+            int uid = this.userHandler.getUID(p);
+            this.plugin.getServer().broadcastMessage("UID: " + uid);
+
+    		this.getUserWarns.setInt(1, uid);
     		this.getUserWarns.execute();
     		rs = this.getUserWarns.getResultSet();
-
-    		rowCount = rs.getInt(1);
 			p.sendMessage(ChatColor.WHITE + p.getName() + ChatColor.DARK_GREEN + " warnings.");
 			while (rs.next()) {
 				if(rowCount == 0){
