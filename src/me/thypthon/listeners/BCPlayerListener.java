@@ -25,6 +25,7 @@ import me.thypthon.handlers.blocks.BlockLog;
 import me.thypthon.handlers.blocks.BlockProtect;
 import me.thypthon.handlers.config.ConfigurationHandler;
 import me.thypthon.handlers.users.UserHandler;
+import me.thypthon.handlers.warns.WarningsHandler;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -41,12 +42,14 @@ public class BCPlayerListener extends PlayerListener {
     private UserHandler userHandler;
 	private BlockProtect bp;
 	private BlockLog blocklog;
+	private WarningsHandler wh;
 
     public BCPlayerListener(BC instance) {
         this.plugin = instance;
         this.userHandler = instance.getUserHandler();
         this.bp = instance.getBlockProtectHandler();
         this.blocklog = instance.getBlockLogHandler();
+        this.wh = instance.getWarningsHandler();
     }
 
     public void onPlayerLogin(PlayerLoginEvent e) {
@@ -86,9 +89,13 @@ public class BCPlayerListener extends PlayerListener {
         } else {
         	p.sendMessage(ChatColor.WHITE + "Goto "+ ChatColor.GREEN +"www.craftit.no "+ ChatColor.WHITE +"for more info.");
         }
-        p.sendMessage("§aDu er i gruppen §f" + this.userHandler.getUserGroup(p));
+        if(this.wh.userWarnsOnline(p) == 0){
+        	// Ingen advarsler.
+        } else {
+        	p.sendMessage(ChatColor.DARK_GREEN + "You have " + ChatColor.WHITE + this.wh.userWarnsOnline(p) + ChatColor.DARK_GREEN + " warnings!");
+        }
         e.setJoinMessage(this.userHandler.getNameColor(p) + ChatColor.GREEN + " logged in.");
-        plugin.getIRC().getIRCConnection().doPrivmsg(cfg.botchannel, userHandler.getIRCNameColor(e.getPlayer().getName()) + ChatColor.GREEN + IRCConstants.COLOR_INDICATOR + "a" + " logged in." + IRCConstants.COLOR_END_INDICATOR);
+        plugin.getIRC().getIRCConnection().doPrivmsg(cfg.botchannel, userHandler.getIRCNameColor(e.getPlayer().getName()) + IRCConstants.COLOR_INDICATOR + "3" + " logged in." + IRCConstants.COLOR_END_INDICATOR);
     }
 
 	public void onPlayerQuit(PlayerQuitEvent e) {
@@ -96,7 +103,7 @@ public class BCPlayerListener extends PlayerListener {
     	Player p = e.getPlayer();
         this.userHandler.logout(e.getPlayer());
         e.setQuitMessage(this.userHandler.getNameColor(p) + ChatColor.RED + " logged out.");
-        plugin.getIRC().getIRCConnection().doPrivmsg(cfg.botchannel, userHandler.getIRCNameColor(e.getPlayer().getName()) + IRCConstants.COLOR_INDICATOR + "c" + " logged out." + IRCConstants.COLOR_END_INDICATOR);
+        plugin.getIRC().getIRCConnection().doPrivmsg(cfg.botchannel, userHandler.getIRCNameColor(e.getPlayer().getName()) + IRCConstants.COLOR_INDICATOR + "4" + " logged out." + IRCConstants.COLOR_END_INDICATOR);
     }
 
 	public void onPlayerChat(PlayerChatEvent e) {

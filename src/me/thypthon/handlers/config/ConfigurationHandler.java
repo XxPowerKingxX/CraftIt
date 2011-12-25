@@ -93,10 +93,10 @@ public class ConfigurationHandler {
         botnick = config.getString("IRC.Nick", "CT");
         botnickservpass = config.getString("IRC.Nickserv-passord", "lardal9");
         botport = Integer.parseInt(config.getString("IRC.Port", "6667"));
-        botserver = config.getString("IRC.Server", "irc.craftit.no");
-        irc = config.getBoolean("IRC.Aktivert", false);
+        botserver = config.getString("IRC.Server", "irc.mibbit.net");
+        irc = config.getBoolean("IRC.Aktivert", true);
         botchannel = config.getString("IRC.Kanal", "#craftit");
-        botssl = config.getBoolean("IRC.SSL", true);
+        botssl = config.getBoolean("IRC.SSL", false);
 
         // Server-spesifikke instillinger
         ispublic = config.getBoolean("Server.Public", true);

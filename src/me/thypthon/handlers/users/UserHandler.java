@@ -364,13 +364,13 @@ public class UserHandler {
 	public String getIRCNameColor(String name) {
     	if (getUserStatus(name) == BC.ADMIN) {
     		//BCIRCListener irc = plugin.getIRC();
-            return IRCConstants.COLOR_INDICATOR + "6" + "[Admin]" + name + IRCConstants.COLOR_END_INDICATOR;
+            return IRCConstants.COLOR_INDICATOR + "7" + "[Admin]" + name + IRCConstants.COLOR_END_INDICATOR;
         } else if (getUserStatus(name) == BC.MOD) {
-        	return IRCConstants.COLOR_INDICATOR + "1" + "[Mod]" + name + IRCConstants.COLOR_END_INDICATOR;
+        	return IRCConstants.COLOR_INDICATOR + "2" + "[Mod]" + name + IRCConstants.COLOR_END_INDICATOR;
         } else if (getUserStatus(name) == BC.BUILDER) {
         	return name;
         } else if (getUserStatus(name) == BC.GUEST) {
-        	return IRCConstants.COLOR_INDICATOR + "7" + "[Guest]" + name + IRCConstants.COLOR_END_INDICATOR;
+        	return IRCConstants.COLOR_INDICATOR + "15" + "[Guest]" + name + IRCConstants.COLOR_END_INDICATOR;
         } else {
             return name;
         }

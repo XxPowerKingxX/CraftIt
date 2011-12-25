@@ -122,21 +122,21 @@ public class BCIRCListener extends Thread {
         public void onJoin(String chan, IRCUser u) {
             ConfigurationHandler cfg = plugin.getGlobalStateManager();
             if(chan.equalsIgnoreCase(cfg.botchannel) && !fuusers.contains(u.getNick())) {
-                plugin.broadcastAll(userHandler.getNameColor(u.getNick()) + ChatColor.GREEN + " logged in (irc).");
+                plugin.broadcastAll(ChatColor.RED + u.getNick() + ChatColor.GREEN + " logged in (irc).");
             }
         }
 
         public void onPart(String chan, IRCUser u, String msg) {
             ConfigurationHandler cfg = plugin.getGlobalStateManager();
             if(chan.equalsIgnoreCase(cfg.botchannel) && !fuusers.contains(u.getNick())) {
-                plugin.broadcastAll(userHandler.getNameColor(u.getNick()) + ChatColor.RED + " logged out (irc).");
+                plugin.broadcastAll(ChatColor.RED + u.getNick() + ChatColor.RED + " logged out (irc).");
             }
         }
 
         public void onPrivmsg(String chan, IRCUser u, String msg) {
             ConfigurationHandler cfg = plugin.getGlobalStateManager();
             if (cfg.botchannel.equalsIgnoreCase(chan) && !fuusers.contains(u.getNick())) {
-                plugin.broadcastAll(userHandler.getNameColor(u.getNick()) + ": " + msg);
+                plugin.broadcastAll(ChatColor.RED + u.getNick() + ": " + msg);
             }
         }
 
@@ -169,7 +169,7 @@ public class BCIRCListener extends Thread {
             @SuppressWarnings("unused")
 			ConfigurationHandler cfg = plugin.getGlobalStateManager();
             if(!fuusers.contains(u.getNick())) {
-                plugin.broadcastAll(userHandler.getNameColor(u.getNick()) + ChatColor.RED + " logged out (irc).");
+                plugin.broadcastAll(ChatColor.RED + u.getNick() + " logged out (irc).");
             }
         }
 

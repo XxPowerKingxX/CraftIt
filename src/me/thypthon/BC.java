@@ -267,6 +267,7 @@ public class BC extends JavaPlugin {
         getCommand("stuck").setExecutor(new StuckCommand(this));
         //getCommand("gr").setExecutor(new GroupCommand(this));
         getCommand("lw").setExecutor(new lwCommand(this));
+        getCommand("low").setExecutor(new lowCommand(this));
         getCommand("warn").setExecutor(new warnCommand(this));
 
     }

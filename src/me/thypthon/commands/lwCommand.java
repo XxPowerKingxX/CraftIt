@@ -25,9 +25,7 @@ public class lwCommand extends CommandHandler {
     @Override
     public boolean onPlayerCommand(Player p, Command command, String label, String[] args) {
         // The user wants to see his own warns.
-    	if (this.wh.listWarns(p)) {
-    		return true;
-    	}
+    	this.wh.listWarns(p);
         return true;
     }
 }

@@ -123,6 +123,39 @@ public class BCBlockListener extends BlockListener {
 
             return;
         }
+        
+        // TNT utplassering
+        if(b.getType() == Material.TNT){
+        	p.sendMessage(ChatColor.RED + "Hmm, this is an TNT.... not allowed through the border. So heres a cake");
+        	b.setType(Material.CAKE_BLOCK);
+        }
+        
+        // Lava plassering
+        if(b.getType() == Material.LAVA || b.getType() == Material.LAVA_BUCKET){
+        	if(this.userHandler.getUserStatus(p) == 0 || this.userHandler.getUserStatus(p) == 1){
+        		p.sendMessage("Contact a mod/admin for that.");
+        		b.setType(Material.AIR);
+        		e.setCancelled(true);
+        	}
+        }
+        
+        // Vann plassering
+        if(b.getType() == Material.WATER || b.getType() == Material.WATER_BUCKET){
+        	if(this.userHandler.getUserStatus(p) == 0 || this.userHandler.getUserStatus(p) == 1){
+        		p.sendMessage("Contact a mod/admin for that.");
+        		b.setType(Material.AIR);
+        		e.setCancelled(true);
+        	}
+        }
+        
+        // Flamme plassering
+        if(b.getType() == Material.FLINT_AND_STEEL){
+        	if(this.userHandler.getUserStatus(p) == 0 || this.userHandler.getUserStatus(p) == 1){
+        		p.sendMessage("Contact a mod/admin for that.");
+        		b.setType(Material.AIR);
+        		e.setCancelled(true);
+        	}
+        }
 
         // Kreves det tillatelse for bygging og kan brukeren bygge?
         if (!this.userHandler.canBuild(p)) {

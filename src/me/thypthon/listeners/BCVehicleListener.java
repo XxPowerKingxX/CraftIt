@@ -21,7 +21,9 @@ package me.thypthon.listeners;
 
 import me.thypthon.BC;
 
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Minecart;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Vehicle;
@@ -44,6 +46,12 @@ public class BCVehicleListener extends VehicleListener {
     // Konstant hastighet for minecarts.
     public void onVehicleUpdate(VehicleUpdateEvent e) {
         Vehicle v = e.getVehicle();
+        Location l = e.getVehicle().getLocation();
+         Block b = e.getVehicle().getWorld().getBlockAt((int)Math.floor(l.getX()), (int)Math.floor(l.getY()) - 1, (int)Math.floor(l.getZ()));
+         
+         if(b.getType() == Material.DIAMOND_BLOCK){
+        	 v.remove();
+         }
     	
         if (!(v instanceof Minecart) || v.getPassenger() == null) {   	
             return;
@@ -64,8 +72,8 @@ public class BCVehicleListener extends VehicleListener {
         }
         v.setVelocity(vel);
     }
-    
-    public void onVehicleExit(VehicleExitEvent e){
+
+	public void onVehicleExit(VehicleExitEvent e){
     	Vehicle v = e.getVehicle();
     	v.remove();
     	Player player = (Player) e.getExited();

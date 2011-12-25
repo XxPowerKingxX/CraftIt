@@ -25,16 +25,16 @@ public class warnCommand extends CommandHandler {
     @Override
     public boolean onPlayerCommand(Player p, Command command, String label, String[] args) {        
         if (args.length >= 1) {
-            Player v = plugin.playerMatch(args[0]);
             if (this.userHandler.getUserStatus(p) >= 5) {
                 if (args.length > 1) {
                     String kick = "";
                     for (int i = 1; i <= args.length - 1; i++) {
                         kick += args[i] + " ";
                     }
-                    if(this.wh.giveWarn(p, v, kick)){
+                    if(this.wh.giveWarn(p, args[0], kick)){
                     	return true;
                     }
+                    return true;
                 }
             }
         }

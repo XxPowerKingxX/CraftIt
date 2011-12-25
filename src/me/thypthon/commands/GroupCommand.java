@@ -27,11 +27,6 @@ public class GroupCommand extends CommandHandler {
 
         String cmd = command.getName();
 
-        if (args.length == 0){
-            return false;
-        }
-
-        if (cmd.equalsIgnoreCase("gr")) {
         	if(args[0].equalsIgnoreCase("new")){
         		this.groupHandler.newg(p, args[1]);
         		return true;
@@ -49,7 +44,6 @@ public class GroupCommand extends CommandHandler {
                 }
                 return true;
         	}
-        }
     	
     	return false;
     }
