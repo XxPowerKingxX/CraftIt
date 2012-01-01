@@ -54,8 +54,8 @@ public class KickCommand extends CommandHandler {
             if (args.length >= 1) {
                 Player v = plugin.playerMatch(args[0]);
                 if (this.userHandler.getUserStatus(p) >= this.userHandler.getUserStatus(v)) {
+                	String kick = "";
                     if (args.length > 1) {
-                        String kick = "";
                         for (int i = 1; i <= args.length - 1; i++) {
                             kick += args[i] + " ";
                         }
@@ -72,6 +72,12 @@ public class KickCommand extends CommandHandler {
                         this.plugin.broadcastAll(ChatColor.YELLOW + "By : " + this.userHandler.getNameColor(p));
                         v.kickPlayer("No reason given, we do not need one.");
                     }
+                    if(kick == ""){
+                    	plugin.getIRC().getIRCConnection().doPrivmsg("#craftit.logg", v.getName() + " ble kicket av " + p.getName() + "." + kick);
+                    } else {
+                    	plugin.getIRC().getIRCConnection().doPrivmsg("#craftit.logg", v.getName() + " ble kicket av " + p.getName() + " for " + kick);
+                    }
+                    
                 } else {
                     p.sendMessage(ChatColor.RED + "You do not have permission to kick this user.");
                 }

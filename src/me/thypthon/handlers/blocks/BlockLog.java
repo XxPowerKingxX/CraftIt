@@ -42,7 +42,7 @@ public class BlockLog {
 
     private Connection conn;
     private PreparedStatement get;
-    private PreparedStatement setlog;
+    public PreparedStatement setlog;
 
     public BlockLog(BC instance) {
         this.sqlHandler = instance.getSqlHandler();

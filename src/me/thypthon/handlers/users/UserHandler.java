@@ -294,12 +294,31 @@ public class UserHandler {
     }
     
     public String getUserGroup(Player p) {
-    	return this.users.get(p).getGroup();
+    	String name1 = "None";
+		try {
+			getUserPS.setString(1, p.getName());
+			ResultSet rs = getUserPS.executeQuery();
+			if (rs.next()) {
+				name1 = rs.getString("group");
+			}
+		} catch (SQLException e) {
+			BC.log.log(Level.SEVERE, "[BC] Feil i WarningsHandler: ", e);
+		}
+		return name1;
     }
     
     public String getUserGroup(String name) {
-        PlayerData pd = getPlayerData(name);
-        return pd.getGroup();
+    	String uname = "None";
+		try {
+			getUserPS.setString(1, name);
+			ResultSet rs = getUserPS.executeQuery();
+			if (rs.next()) {
+				uname = rs.getString("group");
+			}
+		} catch (SQLException e) {
+			BC.log.log(Level.SEVERE, "[BC] Feil i WarningsHandler: ", e);
+		}
+		return uname;
     }
     
     public int getUID(Player p) {
@@ -326,7 +345,7 @@ public class UserHandler {
 
         if ((getUserStatus(p) < 1)) {
         	p.sendMessage(ChatColor.RED + "You do not have permission to build.");
-            p.sendMessage(ChatColor.RED + "Go to craftit.no and send a permit.");
+            p.sendMessage(ChatColor.RED + "Type /reg");
             return false;
         } else {
             return true;
@@ -375,4 +394,21 @@ public class UserHandler {
             return name;
         }
     }
+
+	public int getUIDFromDB(String player) {
+		int id = 0;
+		try {
+            this.getUserPS.setString(1, player);
+
+            ResultSet rs = this.getUserPS.executeQuery();
+
+            while (rs.next()) {
+                id = rs.getInt("id");
+            }
+        } catch (SQLException e) {
+            BC.log.log(Level.SEVERE, "[BC] MySQL Error: " + Thread.currentThread().getStackTrace()[0].getMethodName(), e);
+        }
+		
+		return id;
+	}
 }

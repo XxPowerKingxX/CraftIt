@@ -134,6 +134,9 @@ public class BCPlayerListener extends PlayerListener {
     }
 
     public void onPlayerInteract(PlayerInteractEvent e) {
+    	Player p = e.getPlayer();
+    	Material b = e.getMaterial();
+    	
         // Private Redstone Pressureplates, buttons og levers.
         new PrivateRedstonePPBL(e, plugin);
 
@@ -161,6 +164,39 @@ public class BCPlayerListener extends PlayerListener {
         // Paper
         new PaperBlockProtection(e, plugin);
         
+        // Vann plassering
+        if(p.getItemInHand().getType() == Material.WATER_BUCKET){
+        	if(this.userHandler.getUserStatus(p) == 0){
+        		p.sendMessage("§cContact a mod/admin for that.");
+        		e.setCancelled(true);
+        	} else if (this.userHandler.getUserStatus(p) == 1){
+        		p.sendMessage("§cContact a mod/admin for that.");
+        		e.setCancelled(true);
+        	}
+        }
+        
+        // Vann plassering
+        if(p.getItemInHand().getType() == Material.FLINT_AND_STEEL){
+        	if(this.userHandler.getUserStatus(p) == 0){
+        		p.sendMessage("§cContact a mod/admin for that.");
+        		e.setCancelled(true);
+        	} else if (this.userHandler.getUserStatus(p) == 1){
+        		p.sendMessage("§cContact a mod/admin for that.");
+        		e.setCancelled(true);
+        	}
+        }
+        
+        // Vann plassering
+        if(p.getItemInHand().getType() == Material.LAVA_BUCKET){
+        	if(this.userHandler.getUserStatus(p) == 0){
+        		p.sendMessage("§cContact a mod/admin for that.");
+        		e.setCancelled(true);
+        	} else if (this.userHandler.getUserStatus(p) == 1){
+        		p.sendMessage("§cContact a mod/admin for that.");
+        		e.setCancelled(true);
+        	}
+        }
+        
         // Chest Protection
         if (e.getAction() != Action.LEFT_CLICK_BLOCK && e.getAction() != Action.RIGHT_CLICK_BLOCK) {
             return;
@@ -168,7 +204,6 @@ public class BCPlayerListener extends PlayerListener {
         if (e.getAction() == Action.LEFT_CLICK_BLOCK) {
         	return;
         } else if (e.getAction() == Action.RIGHT_CLICK_BLOCK) {
-        	Player p = e.getPlayer();
         	Block block = e.getClickedBlock();
         	int uid = this.userHandler.getUID(p);
         	String uid_group = this.userHandler.getUserGroup(p);
@@ -177,7 +212,7 @@ public class BCPlayerListener extends PlayerListener {
                 String owner_name = this.userHandler.getNameFromUID(owner);
                 String owner_group = this.userHandler.getUserGroup(owner_name);
                 
-                if (owner == uid || owner_group == uid_group || (owner_group == uid_group && owner_group != "None" && uid_group != "None")) {
+                if (owner == uid || owner_group == uid_group && owner_group != "None" && uid_group != "None") {
         			blocklog.log(uid, block, 3, block.getType().name());
         		} else if(userHandler.getUserStatus(p) >= 5){
         			blocklog.log(uid, block, 3, block.getType().name());
@@ -198,7 +233,6 @@ public class BCPlayerListener extends PlayerListener {
         if (e.getAction() == Action.LEFT_CLICK_BLOCK) {
         	return;
         } else if (e.getAction() == Action.RIGHT_CLICK_BLOCK) {
-        	Player p = e.getPlayer();
         	Block block = e.getClickedBlock();
         	int uid = this.userHandler.getUID(p);
         	String uid_group = this.userHandler.getUserGroup(p);
@@ -207,7 +241,7 @@ public class BCPlayerListener extends PlayerListener {
                 String owner_name = this.userHandler.getNameFromUID(owner);
                 String owner_group = this.userHandler.getUserGroup(owner_name);
                 
-                if (owner == uid || owner_group == uid_group || (owner_group == uid_group && owner_group != "None" && uid_group != "None")) {
+                if (owner == uid || owner_group == uid_group && owner_group != "None" && uid_group != "None") {
         			blocklog.log(uid, block, 3, block.getType().name());
         		} else if(userHandler.getUserStatus(p) >= 5){
         			blocklog.log(uid, block, 3, block.getType().name());
@@ -228,7 +262,6 @@ public class BCPlayerListener extends PlayerListener {
         if (e.getAction() == Action.LEFT_CLICK_BLOCK) {
         	return;
         } else if (e.getAction() == Action.RIGHT_CLICK_BLOCK) {
-        	Player p = e.getPlayer();
         	Block block = e.getClickedBlock();
         	int uid = this.userHandler.getUID(p);
         	String uid_group = this.userHandler.getUserGroup(p);
@@ -237,7 +270,7 @@ public class BCPlayerListener extends PlayerListener {
                 String owner_name = this.userHandler.getNameFromUID(owner);
                 String owner_group = this.userHandler.getUserGroup(owner_name);
                 
-                if (owner == uid || owner_group == uid_group || (owner_group == uid_group && owner_group != "None" && uid_group != "None")) {
+                if (owner == uid || owner_group == uid_group && owner_group != "None" && uid_group != "None") {
         			blocklog.log(uid, block, 3, block.getType().name());
         		} else if(userHandler.getUserStatus(p) >= 5){
         			blocklog.log(uid, block, 3, block.getType().name());
@@ -258,7 +291,6 @@ public class BCPlayerListener extends PlayerListener {
         if (e.getAction() == Action.LEFT_CLICK_BLOCK) {
         	return;
         } else if (e.getAction() == Action.RIGHT_CLICK_BLOCK) {
-        	Player p = e.getPlayer();
         	Block block = e.getClickedBlock();
         	int uid = this.userHandler.getUID(p);
         	String uid_group = this.userHandler.getUserGroup(p);
@@ -267,7 +299,7 @@ public class BCPlayerListener extends PlayerListener {
                 String owner_name = this.userHandler.getNameFromUID(owner);
                 String owner_group = this.userHandler.getUserGroup(owner_name);
                 
-                if (owner == uid || owner_group == uid_group || (owner_group == uid_group && owner_group != "None" && uid_group != "None")) {
+                if (owner == uid || owner_group == uid_group && owner_group != "None" && uid_group != "None") {
         			blocklog.log(uid, block, 3, block.getType().name());
         		} else if(userHandler.getUserStatus(p) >= 5){
         			blocklog.log(uid, block, 3, block.getType().name());

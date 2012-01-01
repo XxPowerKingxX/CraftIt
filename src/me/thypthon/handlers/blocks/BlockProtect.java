@@ -147,14 +147,26 @@ public class BlockProtect {
                     deleted = false;
                     p.sendMessage(ChatColor.RED + "Could not delete block from MySQL.");
                 }
-            } else if(owner_group == uid_group && owner_group != "None" && uid_group != "None"){
-            	if (sqlHandler.update("DELETE FROM blocks WHERE x='" + b.getX() + "' AND y='" + b.getY() + "' AND z='" + b.getZ() + "' AND world='" + b.getWorld().getName() + "'")) {
-                    deleted = true;
-                    this.blocklog.log(p, b, 0, b.getType().name());
+            } else if(owner_group != "None" || uid_group != "None"){
+            	if(owner_group == uid_group){
+            		if (sqlHandler.update("DELETE FROM blocks WHERE x='" + b.getX() + "' AND y='" + b.getY() + "' AND z='" + b.getZ() + "' AND world='" + b.getWorld().getName() + "'")) {
+            			deleted = true;
+            			this.blocklog.log(p, b, 0, b.getType().name());
+            		} else {
+            			deleted = false;
+            			p.sendMessage(ChatColor.RED + "Could not delete block from MySQL.");
+            		}
+            	} else if(owner == 1000011){
+                	deleted = false;
+                	p.sendMessage(ChatColor.RED + "A admin/mod has protected this block. Contact a admin/mod if its not supposed to be protected.");
                 } else {
-                    deleted = false;
-                    p.sendMessage(ChatColor.RED + "Could not delete block from MySQL.");
+                	deleted = false;
+                    String name = this.userHandler.getNameFromUID(owner);
+                    p.sendMessage(ChatColor.RED + name + " owns this block. Contact a mod/admin to have this block removed if its not supposed to be there.");
                 }
+            	
+            	/*p.sendMessage("Owner_group: " + owner_group);
+            	p.sendMessage("User_group: " + uid_group);*/
             } else if(owner == 1000011){
             	deleted = false;
             	p.sendMessage(ChatColor.RED + "A admin/mod has protected this block. Contact a admin/mod if its not supposed to be protected.");

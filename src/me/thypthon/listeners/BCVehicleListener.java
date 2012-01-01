@@ -21,12 +21,16 @@ package me.thypthon.listeners;
 
 import me.thypthon.BC;
 
+import org.bukkit.ChatColor;
+import org.bukkit.DyeColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Minecart;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Vehicle;
+import org.bukkit.event.vehicle.VehicleEnterEvent;
 import org.bukkit.event.vehicle.VehicleExitEvent;
 import org.bukkit.event.vehicle.VehicleListener;
 import org.bukkit.event.vehicle.VehicleUpdateEvent;
@@ -48,10 +52,15 @@ public class BCVehicleListener extends VehicleListener {
         Vehicle v = e.getVehicle();
         Location l = e.getVehicle().getLocation();
          Block b = e.getVehicle().getWorld().getBlockAt((int)Math.floor(l.getX()), (int)Math.floor(l.getY()) - 1, (int)Math.floor(l.getZ()));
+         Block s = e.getVehicle().getWorld().getBlockAt((int)Math.floor(l.getX()), (int)Math.floor(l.getY()) - 2, (int)Math.floor(l.getZ()));
          
          if(b.getType() == Material.DIAMOND_BLOCK){
         	 v.remove();
-         }
+        	 Player player = (Player) v.getPassenger();
+             PlayerInventory inventory = player.getInventory(); // The player's inventory
+             ItemStack diamondstack = new ItemStack(Material.MINECART, 1); // A stack of diamonds
+             inventory.addItem(diamondstack); // Adds a stack of diamonds to the player's inventory
+        }
     	
         if (!(v instanceof Minecart) || v.getPassenger() == null) {   	
             return;
@@ -72,13 +81,37 @@ public class BCVehicleListener extends VehicleListener {
         }
         v.setVelocity(vel);
     }
+    
+    public void onVehicleEnter(VehicleEnterEvent e){
+        Vehicle v = e.getVehicle();
+        Location l = e.getVehicle().getLocation();         
+         Block b = e.getVehicle().getWorld().getBlockAt((int)Math.floor(l.getX()), (int)Math.floor(l.getY()) - 1, (int)Math.floor(l.getZ()));
+         Block s = e.getVehicle().getWorld().getBlockAt((int)Math.floor(l.getX()), (int)Math.floor(l.getY()) - 2, (int)Math.floor(l.getZ()));
+         
+         if(b.getType() == Material.OBSIDIAN){
+             Vector vel = v.getVelocity();
+             if (vel.getX() > 0) {
+                 vel.setX(0.6);
+             }
+             if (vel.getX() < 0) {
+                 vel.setX(-0.6);
+             }
+             if (vel.getZ() > 0) {
+                 vel.setZ(0.6);
+             }
+             if (vel.getZ() < 0) {
+                 vel.setZ(-0.6);
+             }
+             v.setVelocity(vel);
+         }
+    }
 
 	public void onVehicleExit(VehicleExitEvent e){
     	Vehicle v = e.getVehicle();
     	v.remove();
     	Player player = (Player) e.getExited();
         PlayerInventory inventory = player.getInventory(); // The player's inventory
-        ItemStack diamondstack = new ItemStack(Material.MINECART, 0); // A stack of diamonds
+        ItemStack diamondstack = new ItemStack(Material.MINECART, 1); // A stack of diamonds
         inventory.addItem(diamondstack); // Adds a stack of diamonds to the player's inventory
     }
 }

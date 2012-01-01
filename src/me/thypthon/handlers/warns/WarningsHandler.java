@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.logging.Level;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
@@ -58,7 +59,7 @@ public class WarningsHandler {
     		// HMM
     	} else {
     		try {
-    			getUserWarnsCount.setInt(1, this.userHandler.getUID(player));
+    			getUserWarnsCount.setInt(1, this.userHandler.getUIDFromDB(p));
     			ResultSet rs = getUserWarnsCount.executeQuery();
     			if (rs.next()) {
     				rowCount = rs.getInt("rowCount");
@@ -92,6 +93,7 @@ public class WarningsHandler {
     
     public boolean giveWarn(Player p, String givens, String reason){
 		if(reason != null){
+			
 			Player player = plugin.getServer().getOfflinePlayer(givens).getPlayer();
 
 			Location pll = p.getLocation();
@@ -100,14 +102,20 @@ public class WarningsHandler {
 			double pz = pll.getZ();
 			// ACTION \m/
 			// Gi h*n en advarsel >:D
-			if(this.sqlHandler.update("INSERT INTO `warns`(`uid`, `by`, `reason`, `date`, `pos`) VALUES ('" + this.userHandler.getUID(player) + "', '" + this.userHandler.getUID(p) + "', '" + reason + "', UNIX_TIMESTAMP(), '"+px+", "+py+", "+pz+"')")){
+			if(this.sqlHandler.update("INSERT INTO `warns`(`uid`, `by`, `reason`, `date`, `pos`) VALUES ('" + this.userHandler.getUIDFromDB(givens) + "', '" + this.userHandler.getUID(p) + "', '" + reason + "', UNIX_TIMESTAMP(), '"+px+", "+py+", "+pz+"')")){
 				// Gi en beskjed.
-				if(player.isOnline()){
+				if(Bukkit.getServer().getPlayer(givens) != null){
+					// ONLINE :D
 					player.sendMessage(ChatColor.DARK_GREEN + "You have just got a warning!");
 					player.sendMessage(ChatColor.DARK_GREEN + "Reason: " + ChatColor.WHITE + reason + ChatColor.GREEN + ", §2by " + ChatColor.WHITE + p.getName());
+					p.sendMessage(ChatColor.GREEN + "You have just warned " + ChatColor.WHITE + player.getName() + ChatColor.GREEN + " a warning.");
+					p.sendMessage(ChatColor.WHITE + player.getName() + ChatColor.GREEN + " has now " + ChatColor.WHITE + userWarnsOnline(player) + ChatColor.GREEN + " warnings.");
+				} else {
+					// oFFLINE :(
+					p.sendMessage(ChatColor.RED + "The player is offline. So no live-notice is sent.");
+					p.sendMessage(ChatColor.GREEN + "You have just given " + ChatColor.WHITE + givens + ChatColor.GREEN + " a warning.");
+					p.sendMessage(ChatColor.WHITE + givens + ChatColor.GREEN + " has now " + ChatColor.WHITE + userWarns(givens) + ChatColor.GREEN + " warnings.");
 				}
-				p.sendMessage(ChatColor.GREEN + "You have just warned " + ChatColor.WHITE + player.getName() + ChatColor.GREEN + " a warning.");
-				p.sendMessage(ChatColor.WHITE + player.getName() + ChatColor.GREEN + " has now " + ChatColor.WHITE + userWarns(givens) + ChatColor.GREEN + " warnings.");
 				return true;
 			}
 		}
@@ -124,7 +132,7 @@ public class WarningsHandler {
         	getUserWarns.setInt(1, this.userHandler.getUID(p));
         	ResultSet rs = getUserWarns.executeQuery();
 
-        	p.sendMessage("§6--------------------");
+        	p.sendMessage("§6============================");
         	p.sendMessage(ChatColor.WHITE + p.getName() + ChatColor.DARK_GREEN + "'s warnings.");
         	int rowCount = userWarnsOnline(p);
 
@@ -138,7 +146,7 @@ public class WarningsHandler {
         		i++;
         		Date date = new Date(rs.getLong("date") * 1000);
 				p.sendMessage("§2Warning: §f" + rs.getString("reason"));
-				p.sendMessage("§2By: §f" + this.userHandler.getNameFromUID(rs.getInt("by")) + "§2.§a Date: §f" + dateFormat.format(date) + "§a.");
+				p.sendMessage("§2By: §f" + rs.getString("by") + "§2.§a Date: §f" + dateFormat.format(date) + "§a.");
 				p.sendMessage("§2Location: §f" + rs.getString("pos") + "§2.");
 				p.sendMessage("§6--------------------");
         	}
@@ -152,38 +160,75 @@ public class WarningsHandler {
     
     public void listWarnsOthers(Player p, String reqs){
     	Player req = plugin.getServer().getOfflinePlayer(reqs).getPlayer();
+    	Player onreq = plugin.playerMatch(reqs);
     	if(this.userHandler.getUserStatus(p) >= 5){
-    		try {
-    			//this.plugin.getServer().broadcastMessage("Player: " + p);
-    			//int uid = this.userHandler.getUID(p);
-    			//this.plugin.getServer().broadcastMessage("UID: " + uid);
+    		if(Bukkit.getServer().getPlayer(reqs) != null){
+    			try {
+    				//this.plugin.getServer().broadcastMessage("Player: " + p);
+    				//int uid = this.userHandler.getUID(p);
+    				//this.plugin.getServer().broadcastMessage("UID: " + uid);
         	
-    			getUserWarns.setInt(1, this.userHandler.getUID(req));
-    			ResultSet rs = getUserWarns.executeQuery();
+    				getUserWarns.setInt(1, this.userHandler.getUID(onreq));
+    				ResultSet rs = getUserWarns.executeQuery();
     			
-    			p.sendMessage("§6--------------------");
-    			p.sendMessage(ChatColor.WHITE + req.getName() + ChatColor.DARK_GREEN + "'s warnings.");
-    			int rowCount = userWarns(reqs);
+    				p.sendMessage("§6--------------------");
+    				p.sendMessage(ChatColor.WHITE + req.getName() + ChatColor.DARK_GREEN + "'s warnings.");
+    				int rowCount = userWarnsOnline(req);
     			
-    			if (rowCount == 0) {
-    				p.sendMessage(ChatColor.WHITE + "no warnings found.");
+    				if (rowCount == 0) {
+    					p.sendMessage(ChatColor.WHITE + "no warnings found.");
+    					return;
+    				}
+
+    				int i = 0;
+    				while (rs.next()) {
+    					i++;
+    					Date date = new Date(rs.getLong("date") * 1000);
+    					p.sendMessage("§2Warning: §f" + rs.getString("reason"));
+    					p.sendMessage("§2By: §f" + rs.getInt("by") + "§2.§a Date: §f" + dateFormat.format(date) + "§a.");
+    					p.sendMessage("§2Location: §f" + rs.getString("pos") + "§2.");
+    					p.sendMessage("§6--------------------");
+    				}
+    				p.sendMessage("§2Totalt §f" + userWarnsOnline(req) + "§2 w	arnings.");
+    				p.sendMessage("§6============================");
+    			} catch (SQLException e) {
+    				BC.log.log(Level.SEVERE, "[BC] Feil i WarningsHandler: ", e);
     				return;
     			}
-
-    			int i = 0;
-    			while (rs.next()) {
-    				i++;
-    				Date date = new Date(rs.getLong("date") * 1000);
-    				p.sendMessage("§2Warning: §f" + rs.getString("reason"));
-    				p.sendMessage("§2By: §f" + this.userHandler.getNameFromUID(rs.getInt("by")) + "§2.§a Date: §f" + dateFormat.format(date) + "§a.");
-    				p.sendMessage("§2Location: §f" + rs.getString("pos") + "§2.");
+    		} else {
+    			try {
+    				//this.plugin.getServer().broadcastMessage("Player: " + p);
+    				//int uid = this.userHandler.getUID(p);
+    				//this.plugin.getServer().broadcastMessage("UID: " + uid);
+        	
+    				getUserWarns.setInt(1, this.userHandler.getUIDFromDB(reqs));
+    				ResultSet rs = getUserWarns.executeQuery();
+    			
     				p.sendMessage("§6--------------------");
+    				p.sendMessage(ChatColor.WHITE + reqs + ChatColor.DARK_GREEN + "'s warnings.");
+    				int rowCount = userWarns(reqs);
+    			
+    				if (rowCount == 0) {
+    					p.sendMessage(ChatColor.WHITE + "no warnings found.");
+    					return;
+    				}
+
+    				int i = 0;
+    				while (rs.next()) {
+    					i++;
+    					Date date = new Date(rs.getLong("date") * 1000);
+    					p.sendMessage("§2Warning: §f" + rs.getString("reason"));
+    					p.sendMessage("§2By: §f" + rs.getInt("by") + "§2.§a Date: §f" + dateFormat.format(date) + "§a.");
+    					p.sendMessage("§2Location: §f" + rs.getString("pos") + "§2.");
+    					p.sendMessage("§6--------------------");
+    				}
+    				p.sendMessage("§2Totalt §f" + userWarns(reqs) + "§2 w	arnings.");
+    				p.sendMessage("§6============================");
+    			} catch (SQLException e) {
+    				BC.log.log(Level.SEVERE, "[BC] Feil i WarningsHandler: ", e);
+    				return;
     			}
-    			p.sendMessage("§2Totalt §f" + userWarns(reqs) + "§2 warnings.");
-    			p.sendMessage("§6============================");
-    		} catch (SQLException e) {
-    			BC.log.log(Level.SEVERE, "[BC] Feil i WarningsHandler: ", e);
-    			return;
+    			p.sendMessage(ChatColor.RED + "BC-WarnHandler : Offline-player mode is stil in development.");
     		}
     	} else {
     		p.sendMessage(ChatColor.RED + "You do not have permission.");

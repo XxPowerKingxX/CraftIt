@@ -26,6 +26,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import me.thypthon.commands.*;
+import me.thypthon.handlers.BankHandler;
 import me.thypthon.handlers.blocks.BlockLog;
 import me.thypthon.handlers.blocks.BlockProtect;
 import me.thypthon.handlers.blocks.LogHandler;
@@ -91,6 +92,7 @@ public class BC extends JavaPlugin {
     // Handlers
     private UserHandler userHandler = new UserHandler(this);
     private WarningsHandler warningsHandler = new WarningsHandler(this);
+    private BankHandler bankHandler = new BankHandler(this);
     private GroupHandler groupHandler = new GroupHandler(this);
     private BlockLog blocklog = new BlockLog(this);
     private BlockProtect blockProtect = new BlockProtect(this);
@@ -98,7 +100,6 @@ public class BC extends JavaPlugin {
     private Zones zones = new Zones();
 
     // WorldEdit Bridging
-    @SuppressWarnings("unused")
 	private WorldEditBridge worldEditBridge = new WorldEditBridge(this);
 
     // Logger
@@ -174,6 +175,7 @@ public class BC extends JavaPlugin {
         this.blockProtect.initialize();
         this.blocklog.initialize();
         this.warningsHandler.initialize();
+        this.bankHandler.initialize();
         this.groupHandler.initialize();
         this.irc.initialize();
         registerCommands();
@@ -265,10 +267,14 @@ public class BC extends JavaPlugin {
         getCommand("demote").setExecutor(new DemoteCommand(this));
         getCommand("mod").setExecutor(new ModUserCommand(this));
         getCommand("stuck").setExecutor(new StuckCommand(this));
-        //getCommand("gr").setExecutor(new GroupCommand(this));
         getCommand("lw").setExecutor(new lwCommand(this));
+        getCommand("reg").setExecutor(new regCommand(this));
+        getCommand("gr").setExecutor(new GroupCommand(this));
         getCommand("low").setExecutor(new lowCommand(this));
         getCommand("warn").setExecutor(new warnCommand(this));
+        getCommand("t").setExecutor(new saleCommand(this));
+        getCommand("who").setExecutor(new WhoCommand(this));
+        getCommand("bank").setExecutor(new BankCommand(this));
 
     }
 
@@ -316,6 +322,10 @@ public class BC extends JavaPlugin {
 
     public BlockLog getBlockLogHandler() {
         return blocklog;
+    }
+    
+    public WorldEditBridge getWEBH() {
+        return worldEditBridge;
     }
 
     public MySQLObject getMySQLObject() {
@@ -447,9 +457,22 @@ public class BC extends JavaPlugin {
             }
         }
     }
+    
+    public void broadcastTrade(String message){
+    	for (World w : this.getServer().getWorlds()) {
+            for (Player p : w.getPlayers()) {
+            	p.sendMessage("§a[Buy/Sale] §f" + message);
+            }
+        }
+    }
 
 	public WarningsHandler getWarningsHandler() {
 		// TODO Auto-generated method stub
 		return warningsHandler;
+	}
+
+	public BankHandler getBankHandler() {
+		// TODO Auto-generated method stub
+		return bankHandler;
 	}
 }

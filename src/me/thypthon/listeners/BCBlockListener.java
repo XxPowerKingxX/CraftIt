@@ -131,18 +131,38 @@ public class BCBlockListener extends BlockListener {
         }
         
         // Lava plassering
-        if(b.getType() == Material.LAVA || b.getType() == Material.LAVA_BUCKET){
-        	if(this.userHandler.getUserStatus(p) == 0 || this.userHandler.getUserStatus(p) == 1){
-        		p.sendMessage("Contact a mod/admin for that.");
+        if(b.getType() == Material.LAVA){
+        	if(this.userHandler.getUserStatus(p) == 0){
+        		p.sendMessage("§cContact a mod/admin for that.");
+        		b.setType(Material.AIR);
+        		e.setCancelled(true);
+        	} else if (this.userHandler.getUserStatus(p) == 1){
+        		p.sendMessage("§cContact a mod/admin for that.");
         		b.setType(Material.AIR);
         		e.setCancelled(true);
         	}
         }
         
         // Vann plassering
-        if(b.getType() == Material.WATER || b.getType() == Material.WATER_BUCKET){
-        	if(this.userHandler.getUserStatus(p) == 0 || this.userHandler.getUserStatus(p) == 1){
-        		p.sendMessage("Contact a mod/admin for that.");
+        if(b.getType() == Material.WATER){
+        	if(this.userHandler.getUserStatus(p) == 0){
+        		p.sendMessage("§cContact a mod/admin for that.");
+        		b.setType(Material.AIR);
+        		e.setCancelled(true);
+        	} else if (this.userHandler.getUserStatus(p) == 1){
+        		p.sendMessage("§cContact a mod/admin for that.");
+        		b.setType(Material.AIR);
+        		e.setCancelled(true);
+        	}
+        }
+        
+        if(b.getType() == Material.WATER_BUCKET){
+        	if(this.userHandler.getUserStatus(p) == 0){
+        		p.sendMessage("§cContact a mod/admin for that.");
+        		b.setType(Material.AIR);
+        		e.setCancelled(true);
+        	} else if (this.userHandler.getUserStatus(p) == 1){
+        		p.sendMessage("§cContact a mod/admin for that.");
         		b.setType(Material.AIR);
         		e.setCancelled(true);
         	}
@@ -151,7 +171,7 @@ public class BCBlockListener extends BlockListener {
         // Flamme plassering
         if(b.getType() == Material.FLINT_AND_STEEL){
         	if(this.userHandler.getUserStatus(p) == 0 || this.userHandler.getUserStatus(p) == 1){
-        		p.sendMessage("Contact a mod/admin for that.");
+        		p.sendMessage("§cContact a mod/admin for that.");
         		b.setType(Material.AIR);
         		e.setCancelled(true);
         	}

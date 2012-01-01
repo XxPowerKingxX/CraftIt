@@ -52,9 +52,9 @@ public class BCIRCListener extends Thread {
         ConfigurationHandler cfg = this.plugin.getGlobalStateManager();
         if (cfg.irc) {
             if (!cfg.botssl) {
-                conn = new IRCConnection(cfg.botserver, cfg.botport, cfg.botport, "", cfg.botnick, cfg.botnick, "BC.no Bot");
+                conn = new IRCConnection(cfg.botserver, cfg.botport, cfg.botport, "", cfg.botnick, cfg.botnick, "CraftIT");
             } else {
-                conn = new SSLIRCConnection(cfg.botserver, cfg.botport, cfg.botport, "", cfg.botnick, cfg.botnick, "BC.no Bot");
+                conn = new SSLIRCConnection(cfg.botserver, cfg.botport, cfg.botport, "", cfg.botnick, cfg.botnick, "CraftIT");
                 ((SSLIRCConnection) conn).addTrustManager(new TrustManager());
             }
             conn.addIRCEventListener(new Listener());
@@ -97,8 +97,10 @@ public class BCIRCListener extends Thread {
             // Koblet til serveren
             ConfigurationHandler cfg = plugin.getGlobalStateManager();
             // Nickserv
-            conn.doPrivmsg("nickserv", "identify " + cfg.botnickservpass);
+            //conn.doPrivmsg("nickserv", "identify " + cfg.botnickservpass);
             conn.doJoin(cfg.botchannel);
+            conn.doJoin("#craftit.bank");
+            conn.doJoin("#craftit.logg");
         }
 
         public void onDisconnected() {
@@ -136,7 +138,7 @@ public class BCIRCListener extends Thread {
         public void onPrivmsg(String chan, IRCUser u, String msg) {
             ConfigurationHandler cfg = plugin.getGlobalStateManager();
             if (cfg.botchannel.equalsIgnoreCase(chan) && !fuusers.contains(u.getNick())) {
-                plugin.broadcastAll(ChatColor.RED + u.getNick() + ": " + msg);
+                plugin.broadcastAll(ChatColor.RED + u.getNick() + ":§f " + msg);
             }
         }
 
