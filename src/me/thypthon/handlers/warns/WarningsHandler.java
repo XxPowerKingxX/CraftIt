@@ -107,7 +107,7 @@ public class WarningsHandler {
 				if(Bukkit.getServer().getPlayer(givens) != null){
 					// ONLINE :D
 					player.sendMessage(ChatColor.DARK_GREEN + "You have just got a warning!");
-					player.sendMessage(ChatColor.DARK_GREEN + "Reason: " + ChatColor.WHITE + reason + ChatColor.GREEN + ", §2by " + ChatColor.WHITE + p.getName());
+					player.sendMessage(ChatColor.DARK_GREEN + "Reason: " + ChatColor.WHITE + reason + ChatColor.GREEN + ", ï¿½2by " + ChatColor.WHITE + p.getName());
 					p.sendMessage(ChatColor.GREEN + "You have just warned " + ChatColor.WHITE + player.getName() + ChatColor.GREEN + " a warning.");
 					p.sendMessage(ChatColor.WHITE + player.getName() + ChatColor.GREEN + " has now " + ChatColor.WHITE + userWarnsOnline(player) + ChatColor.GREEN + " warnings.");
 				} else {
@@ -132,7 +132,7 @@ public class WarningsHandler {
         	getUserWarns.setInt(1, this.userHandler.getUID(p));
         	ResultSet rs = getUserWarns.executeQuery();
 
-        	p.sendMessage("§6============================");
+        	p.sendMessage(ChatColor.GOLD + "============================");
         	p.sendMessage(ChatColor.WHITE + p.getName() + ChatColor.DARK_GREEN + "'s warnings.");
         	int rowCount = userWarnsOnline(p);
 
@@ -144,14 +144,15 @@ public class WarningsHandler {
         	int i = 0;
         	while (rs.next()) {
         		i++;
+        		// Fix for color errors
         		Date date = new Date(rs.getLong("date") * 1000);
-				p.sendMessage("§2Warning: §f" + rs.getString("reason"));
-				p.sendMessage("§2By: §f" + rs.getString("by") + "§2.§a Date: §f" + dateFormat.format(date) + "§a.");
-				p.sendMessage("§2Location: §f" + rs.getString("pos") + "§2.");
-				p.sendMessage("§6--------------------");
+				p.sendMessage(ChatColor.DARK_GREEN + "Warning:" + rs.getString(ChatColor.WHITE + "reason"));
+			p.sendMessage(ChatColor.DARK_GREEN + "By:" + rs.getString(ChatColor.DARK_BLUE+ "by") + ChatColor.GREEN + ". Date: " + dateFormat.format(date) + ".");
+				p.sendMessage(ChatColor.DARK_GREEN + "Location: " + rs.getString(ChatColor.WHITE + "pos") + ".");
+				p.sendMessage(ChatColor.GOLD + "============================");
         	}
-			p.sendMessage("§2Totalt §f" + userWarnsOnline(p) + "§2 warnings.");
-			p.sendMessage("§6============================");
+		p.sendMessage(ChatColor.DARK_GREEN + "Totalt :" + userWarnsOnline(p) + ChatColor.GREEN + "warnings.");
+			p.sendMessage(ChatColor.GOLD + "============================");
     	} catch (SQLException e) {
             BC.log.log(Level.SEVERE, "[BC] Feil i WarningsHandler: ", e);
             return;
@@ -171,7 +172,7 @@ public class WarningsHandler {
     				getUserWarns.setInt(1, this.userHandler.getUID(onreq));
     				ResultSet rs = getUserWarns.executeQuery();
     			
-    				p.sendMessage("§6--------------------");
+    				p.sendMessage(ChatColor.GOLD + "--------------------");
     				p.sendMessage(ChatColor.WHITE + req.getName() + ChatColor.DARK_GREEN + "'s warnings.");
     				int rowCount = userWarnsOnline(req);
     			
@@ -184,13 +185,13 @@ public class WarningsHandler {
     				while (rs.next()) {
     					i++;
     					Date date = new Date(rs.getLong("date") * 1000);
-    					p.sendMessage("§2Warning: §f" + rs.getString("reason"));
-    					p.sendMessage("§2By: §f" + rs.getInt("by") + "§2.§a Date: §f" + dateFormat.format(date) + "§a.");
-    					p.sendMessage("§2Location: §f" + rs.getString("pos") + "§2.");
-    					p.sendMessage("§6--------------------");
+    					p.sendMessage(ChatColor.DARK_GREEN + "Warning: " + rs.getString(ChatColor.WHITE + "reason"));
+    					p.sendMessage(ChatColor.DARK_GREEN + "By: " + rs.getInt(ChatColor.BLUE + "by") + ". Date: " + dateFormat.format(date) + ".");
+    					p.sendMessage(ChatColor.DARK_GREEN + "Location: " + rs.getString(ChatColor.WHITE + "pos") + ".");
+    					p.sendMessage(ChatColor.GOLD + "--------------------");
     				}
-    				p.sendMessage("§2Totalt §f" + userWarnsOnline(req) + "§2 w	arnings.");
-    				p.sendMessage("§6============================");
+    				p.sendMessage(ChatColor.DARK_GREEN + "Totalt " + userWarnsOnline(req) + "ï¿½2 	rnings.");
+    				p.sendMessage(ChatColor.GOLD + "============================");
     			} catch (SQLException e) {
     				BC.log.log(Level.SEVERE, "[BC] Feil i WarningsHandler: ", e);
     				return;
@@ -204,7 +205,7 @@ public class WarningsHandler {
     				getUserWarns.setInt(1, this.userHandler.getUIDFromDB(reqs));
     				ResultSet rs = getUserWarns.executeQuery();
     			
-    				p.sendMessage("§6--------------------");
+    				p.sendMessage(ChatColor.GOLD + "--------------------");
     				p.sendMessage(ChatColor.WHITE + reqs + ChatColor.DARK_GREEN + "'s warnings.");
     				int rowCount = userWarns(reqs);
     			
@@ -217,13 +218,13 @@ public class WarningsHandler {
     				while (rs.next()) {
     					i++;
     					Date date = new Date(rs.getLong("date") * 1000);
-    					p.sendMessage("§2Warning: §f" + rs.getString("reason"));
-    					p.sendMessage("§2By: §f" + rs.getInt("by") + "§2.§a Date: §f" + dateFormat.format(date) + "§a.");
-    					p.sendMessage("§2Location: §f" + rs.getString("pos") + "§2.");
-    					p.sendMessage("§6--------------------");
+    					p.sendMessage(ChatColor.DARK_GREEN + "Warning: " + rs.getString(ChatColor.WHITE + "reason"));
+    					p.sendMessage(ChatColor.DARK_GREEN + "By: " + rs.getInt("by") + ChatColor.WHITE + " Date: " + dateFormat.format(date) + ".");
+    				p.sendMessage(ChatColor.DARK_GREEN + "Location: " + rs.getString(ChatColor.WHITE + "pos") + ".");
+    					p.sendMessage(ChatColor.GOLD + "--------------------");
     				}
-    				p.sendMessage("§2Totalt §f" + userWarns(reqs) + "§2 w	arnings.");
-    				p.sendMessage("§6============================");
+    			p.sendMessage(ChatColor.DARK_GREEN + "Totalt " + userWarns(reqs) + ChatColor.DARK_GREEN +  " warnings.");
+    				p.sendMessage(ChatColor.GOLD + "============================");
     			} catch (SQLException e) {
     				BC.log.log(Level.SEVERE, "[BC] Feil i WarningsHandler: ", e);
     				return;
